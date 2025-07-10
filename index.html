@@ -1683,16 +1683,316 @@
     <!-- Particles.js script -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     
-    <!-- Custom cursor and back-to-top script -->
-    <script src="js/cursor-and-backtotop.js"></script>
-    
-    <!-- Fix for portfolio issues -->
-    <script src="js/portfolio-fix.js"></script>
-    
-    <!-- Direct initialization of Typed.js -->
+    <!-- All JavaScript inlined for standalone functionality -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize the typing effect directly
+    // =========================================
+    // EXPERIENCE DATA
+    // =========================================
+    const experience = [
+        { 
+            role: "Chief Technology Officer", 
+            company: "Suits Consultants", 
+            period: "February 2025 - Present",
+            desc: "As CTO, I lead the company's technology vision, driving the development of end-to-end AI and automation strategies. My focus is on delivering intelligent, scalable, and user-friendly systems that solve real-world business problems.",
+            details: [
+                "Architecting cross-platform assistants (Telegram, WhatsApp, Voice) with integrations for calendars, CRMs, and e-commerce platforms.",
+                "Building and managing data pipelines, reconciliation engines, and advanced RAG systems to convert raw data into actionable intelligence.",
+                "Championing the Model Context Protocol (MCP) and other emerging AI standards to build context-aware, multi-step agents.",
+                "Mentoring engineering teams, aligning technology with business goals, and simplifying complex challenges into elegant user experiences."
+            ]
+        },
+        { 
+            role: "AI Engineer", 
+            company: "Codifica Inc.", 
+            period: "April 2024 - February 2025",
+            desc: "Specialized in building intelligent, scalable AI systems with a focus on conversational AI and voice agents using FastAPI, LLMs, and cloud-native architectures.",
+            details: [
+                "Designed and delivered HIPAA-compliant conversational AI solutions for dental clinics, handling appointments, patient queries, and FAQs.",
+                "Engineered a scalable backend for registering LLM tools and voice settings, allowing users to deploy custom voice agents with minimal setup.",
+                "Developed and deployed AI-driven solutions using custom LLMs to automate tasks and enhance business operations.",
+                "Integrated AI LLMs with existing workflows using LangChain for chatbot development and business process automation."
+            ]
+        },
+        { 
+            role: "Automation Specialist", 
+            company: "Jsons Communication", 
+            period: "April 2022 - July 2023",
+            desc: "Automated QA processes and office operations, significantly reducing manual effort through AI-driven automation techniques.",
+            details: [
+                "Streamlined workflows by developing scripts and tools that trigger AI-based services to improve operational efficiency.",
+                "Developed and optimized speech-to-text solutions, enhancing transcription accuracy for voice-enabled automation.",
+                "Engineered AI integrations with Twilio and Vonage to handle inbound and outbound calling, improving communication and operational responsiveness."
+            ]
+        },
+        { 
+            role: "AI/ML Engineer", 
+            company: "Suits Consultants", 
+            period: "April 2022 - July 2023",
+            desc: "Led data visualization and analytics enhancements, delivering AI/ML solutions tailored to specific business requirements.",
+            details: [
+                "Developed predictive models and data-driven applications to automate data analysis tasks and optimize decision-making.",
+                "Automated accounting reconciliation processes, ensuring timely and accurate financial record-keeping."
+            ]
+        },
+        { 
+            role: "AI Engineer", 
+            company: "HopeTownAI", 
+            period: "2020 - 2021",
+            desc: "Built and integrated AI-powered assistants to automate personal and business productivity tasks.",
+            details: [
+                "Built a personal AI assistant integrated with Gmail, Google Calendar, and SmartSheets to automate event scheduling, sheet updates, and email communication.",
+                "Integrated Twilio with ElevenLabs to develop a voice assistant that forwards calls to specific departments based on user intent."
+            ]
+        }
+    ];
+    
+    // =========================================
+    // CURSOR AND BACK TO TOP FUNCTIONALITY
+    // =========================================
+    (function() {
+        // Custom cursor implementation
+        function initCustomCursor() {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorOutline = document.getElementById('cursor-dot-outline');
+            
+            // Only initialize on desktop
+            if (window.innerWidth > 768) {
+                document.addEventListener('mousemove', (e) => {
+                    const posX = e.clientX;
+                    const posY = e.clientY;
+                    
+                    cursorDot.style.left = `${posX}px`;
+                    cursorDot.style.top = `${posY}px`;
+                    
+                    // Add a slight delay to outline for smooth effect
+                    setTimeout(() => {
+                        cursorOutline.style.left = `${posX}px`;
+                        cursorOutline.style.top = `${posY}px`;
+                    }, 50);
+                });
+                
+                // Add hover effect to interactive elements
+                const interactiveElements = document.querySelectorAll('a, button, .project-card, .card-hover, .cyber-card, .timeline-content');
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        document.body.classList.add('cursor-hover');
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        document.body.classList.remove('cursor-hover');
+                    });
+                });
+                
+                // Add click effect
+                document.addEventListener('mousedown', () => {
+                    document.body.classList.add('cursor-down');
+                });
+                document.addEventListener('mouseup', () => {
+                    document.body.classList.remove('cursor-down');
+                });
+            }
+        }
+        
+        // Back to top implementation
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('backToTop');
+            const scrollThreshold = 300; // Show button after scrolling 300px
+            
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > scrollThreshold) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            // Scroll to top when clicked
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCustomCursor();
+            initBackToTop();
+        });
+    })();
+    
+    // =========================================
+    // PORTFOLIO FUNCTIONALITY
+    // =========================================
+    // Creating a timeline container that wasn't in the original HTML
+    function createTimelineContainer() {
+        // Create timeline container div
+        const timelineContainer = document.createElement('div');
+        timelineContainer.id = 'timeline-container';
+        timelineContainer.className = 'relative';
+        
+        // Add the timeline vertical line
+        const timelineLine = document.createElement('div');
+        timelineLine.className = 'timeline relative before:content-[\"\"] before:absolute before:left-[40%] before:transform before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-[3px] before:bg-gradient-to-b before:from-cyan-400 before:to-pink-500 before:shadow-[0_0_20px_rgba(0,255,255,0.6)] before:z-[1] before:transition-all before:duration-500 before:ease-in-out before:animate-[pulse-line_4s_ease-in-out_infinite]';
+        
+        timelineContainer.appendChild(timelineLine);
+        
+        // Add it to the experience section
+        const experienceList = document.getElementById('experience-list');
+        experienceList.appendChild(timelineContainer);
+        
+        return timelineContainer;
+    }
+
+    // Fix duplicate projects in project grid
+    function fixProjectGrid() {
+        const projectGrid = document.getElementById('project-grid');
+        
+        // Clear all projects
+        projectGrid.innerHTML = '';
+        
+        // Repopulate with projects
+        projects.forEach((project) => {
+            // Get icon based on tags
+            let icon = '';
+            if (project.tags.includes('Voice AI') || project.tags.includes('AI Agents')) {
+                icon = '<i class="fas fa-robot"></i>';
+            } else if (project.tags.includes('WhatsApp') || project.tags.includes('Chatbot')) {
+                icon = '<i class="fas fa-comment-dots"></i>';
+            } else if (project.tags.includes('Computer Vision') || project.tags.includes('Generative AI')) {
+                icon = '<i class="fas fa-camera-retro"></i>';
+            } else if (project.tags.includes('RAG') || project.tags.includes('NLP')) {
+                icon = '<i class="fas fa-brain"></i>';
+            } else if (project.tags.includes('Financial AI') || project.tags.includes('QA Automation')) {
+                icon = '<i class="fas fa-shield-alt"></i>';
+            } else {
+                icon = '<i class="fas fa-microchip"></i>';
+            }
+            
+            const card = document.createElement('div');
+            card.className = 'project-card p-8 cursor-pointer flex flex-col h-full fade-in-item';
+            card.innerHTML = `
+                <div class="project-icon">${icon}</div>
+                <h3 class="glitch-title text-2xl font-bold text-white mb-3">${project.title}</h3>
+                <div class="glow-line w-1/3 h-px bg-gradient-to-r from-cyan-400 to-transparent mb-4"></div>
+                <p class="text-slate-300 mb-6 flex-grow">${project.short}</p>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                    ${project.tags.map(tag => `<span class="tag rounded" style="background-color: var(--tag-bg); color: var(--tag-text);">${tag}</span>`).join('')}
+                </div>
+                <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-cyan-500/10 to-transparent transform rotate-45"></div>
+                <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-500/10 to-transparent transform -rotate-45"></div>
+            `;
+            card.addEventListener('click', () => openModal(project));
+            projectGrid.appendChild(card);
+        });
+    }
+
+    // Fix redundant skills
+    function fixSkills() {
+        const competenciesList = document.getElementById('competencies-list');
+        
+        // Clear all competencies
+        competenciesList.innerHTML = '';
+        
+        // Re-add competencies without duplications
+        competencies.forEach(skill => {
+            const el = document.createElement('span');
+            el.className = 'bg-gray-800 border border-slate-700 text-slate-200 text-sm font-medium px-4 py-2 transition-colors hover:bg-cyan-800/50 hover:border-cyan-600';
+            el.textContent = skill;
+            competenciesList.appendChild(el);
+        });
+    }
+
+    // Observer for timeline items
+    function observeTimelineItem(item) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+        
+        observer.observe(item);
+    }
+
+    // Initialize timeline container function
+    function initializeTimeline() {
+        // Create timeline container if it doesn't exist
+        if (!document.getElementById('timeline-container')) {
+            const timelineContainer = createTimelineContainer();
+            
+            // Re-populate experience timeline
+            experience.forEach((job, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item mb-24 flex justify-between items-start w-full';
+                const textAlign = index % 2 === 0 ? 'text-right' : 'text-left';
+                
+                // Create bullet points for detailed responsibilities
+                const detailsList = job.details.map(detail => 
+                    `<li class="mb-3 text-sm text-slate-300"><span class="text-cyan-400 mr-2 inline-block transform -translate-y-px">></span>${detail}</li>`
+                ).join('');
+
+                item.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    ${index % 2 === 0 ? 
+                    `<div class="timeline-content w-full md:w-4/12 px-4 py-2 ${textAlign}">
+                        <div class="bg-black/80 p-8 border border-slate-800 hover:border-cyan-900 transition-all duration-300 relative overflow-hidden group">
+                            <!-- Decoration elements -->
+                            <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-cyan-500/10 to-transparent transform rotate-45"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-500/10 to-transparent transform -rotate-45"></div>
+                            
+                            <!-- Content -->
+                            <div class="text-cyan-400 text-xs mb-1 font-medium tracking-widest">${job.period}</div>
+                            <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">${job.role}</h3>
+                            <p class="text-pink-400 mb-4 font-semibold">${job.company}</p>
+                            <p class="text-slate-300 text-sm mb-5 leading-relaxed">${job.desc}</p>
+                            <div class="pt-4 border-t border-slate-700/50">
+                                <h4 class="text-sm font-semibold text-white mb-3">Key Responsibilities:</h4>
+                                <ul class="list-none pl-0 space-y-1">
+                                    ${detailsList}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block w-7/12"></div>` 
+                    :
+                    `<div class="hidden md:block w-5/12"></div>
+                    <div class="timeline-content w-full md:w-6/12 px-4 py-2 ${textAlign}">
+                        <div class="bg-black/80 p-8 border border-slate-800 hover:border-cyan-900 transition-all duration-300 relative overflow-hidden group">
+                            <!-- Decoration elements -->
+                            <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-cyan-500/10 to-transparent transform rotate-45"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-500/10 to-transparent transform -rotate-45"></div>
+                            
+                            <!-- Content -->
+                            <div class="text-cyan-400 text-xs mb-1 font-medium tracking-widest">${job.period}</div>
+                            <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">${job.role}</h3>
+                            <p class="text-pink-400 mb-4 font-semibold">${job.company}</p>
+                            <p class="text-slate-300 text-sm mb-5 leading-relaxed">${job.desc}</p>
+                            <div class="pt-4 border-t border-slate-700/50">
+                                <h4 class="text-sm font-semibold text-white mb-3">Key Responsibilities:</h4>
+                                <ul class="list-none pl-0 space-y-1">
+                                    ${detailsList}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`}
+                `;
+                
+                timelineContainer.appendChild(item);
+                
+                // Use the specialized timeline observer
+                observeTimelineItem(item);
+            });
+        }
+    }
+
+    // Initialize the typing effect
+    function initTypingEffect() {
         const typedElement = document.getElementById('typed');
         
         if (typedElement) {
@@ -1700,9 +2000,9 @@
                 strings: [
                     'Conversational AI Architect',
                     'Voice AI & Automation Expert',
+                    'CTO & AI Engineering Leader',
                     'LLM & RAG Systems Specialist',
-                    'AI Application Developer',
-                    'CTO & AI Engineering Leader'
+                    'AI Application Developer'
                 ],
                 typeSpeed: 50,
                 backSpeed: 30,
@@ -1713,10 +2013,25 @@
                 showCursor: true,
                 cursorChar: '|'
             });
-            console.log('Typed.js initialized successfully in main HTML!');
+            console.log('Typed.js initialized successfully!');
         } else {
-            console.error('Typed element not found in main HTML!');
+            console.error('Typed element not found!');
         }
+    }
+
+    // Main initialization function
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize typing effect
+        initTypingEffect();
+        
+        // Initialize timeline with experience data
+        initializeTimeline();
+        
+        // Fix project grid (remove duplicates)
+        fixProjectGrid();
+        
+        // Fix skills (remove redundancies)
+        fixSkills();
     });
     </script>
     
